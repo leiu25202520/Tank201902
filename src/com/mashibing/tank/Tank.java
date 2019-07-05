@@ -139,9 +139,17 @@ public class Tank {
             case KeyEvent.VK_DOWN:
                 bD = false;
                 break;
+            case KeyEvent.VK_CONTROL:
+                fire();
+                break;
+
         }
 
         setMainDir();
 
+    }
+
+    private void fire() {
+        new Bullet(x,y,dir,group);
     }
 }
