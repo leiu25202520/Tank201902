@@ -3,6 +3,8 @@ package com.mashibing.tank;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TankFrame  extends Frame {
 
@@ -10,17 +12,24 @@ public class TankFrame  extends Frame {
     private Tank myTank;
     private Tank enemy;
     private Bullet bullet;
+    private List<Bullet> bullets;
 
     public TankFrame(){
         this.setTitle("tank war");
+
         this.setLocation(400,100);
         this.setSize(800,600);
 
         this.addKeyListener(new TankKeyListener());
 
-        myTank = new Tank(100,100,Dir.R,Group.GOOD);
-        enemy = new Tank(200,200,Dir.D,Group.BAD);
+        myTank = new Tank(100,100,Dir.R,Group.GOOD,this);
+        enemy = new Tank(200,200,Dir.D,Group.BAD,this);
         bullet = new Bullet(100,100,Dir.D,Group.GOOD);
+        bullets = new ArrayList<>();
+    }
+
+    public void add(Bullet bullet){
+        this.bullet = bullet;
     }
 
     @Override
