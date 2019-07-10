@@ -1,10 +1,7 @@
 package com.mashibing.tank;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 
 public class Tank {
     private int x, y;
@@ -14,15 +11,13 @@ public class Tank {
     private boolean moving = false;
     private Group group;
 
-    TankFrame tf;
 
 
-    public Tank(int x, int y, Dir dir, Group group,TankFrame tf) {
+    public Tank(int x, int y, Dir dir, Group group) {
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.group = group;
-        this.tf = tf;
     }
 
 
@@ -153,7 +148,6 @@ public class Tank {
     }
 
     private void fire() {
-        System.out.println("fire");
-        tf.add(new Bullet(x,y,dir,group));
+        TankFrame.INSTANCE.add(new Bullet(x,y,dir,group));
     }
 }

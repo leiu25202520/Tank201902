@@ -7,11 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TankFrame  extends Frame {
+    public static final TankFrame INSTANCE = new TankFrame();
+
 
     public static final int GAME_WIDTH = 800,GAME_HEIGHT = 600;
+
     private Tank myTank;
     private Tank enemy;
-    private Bullet bullet;
     private List<Bullet> bullets;
 
     public TankFrame(){
@@ -22,21 +24,28 @@ public class TankFrame  extends Frame {
 
         this.addKeyListener(new TankKeyListener());
 
-        myTank = new Tank(100,100,Dir.R,Group.GOOD,this);
-        enemy = new Tank(200,200,Dir.D,Group.BAD,this);
-        bullet = new Bullet(100,100,Dir.D,Group.GOOD);
+        myTank = new Tank(100,100,Dir.R,Group.GOOD);
+        enemy = new Tank(200,200,Dir.D,Group.BAD);
         bullets = new ArrayList<>();
     }
 
     public void add(Bullet bullet){
-        this.bullet = bullet;
+        this.bullets.add(bullet);
     }
 
     @Override
     public void paint(Graphics g){
+        Color c = g.getColor();
+        g.setColor(Color.WHITE);
+        g.drawString("bullets:"+ bullets.size(),10,40);
+        g.setColor(c);
+
         myTank.paint(g);
         enemy.paint(g);
-        bullet.paint(g);
+
+        for(int i = 0; i < bullets.size();i++){
+            bullets.get(i).paint(g);
+        }
 
     }
 
