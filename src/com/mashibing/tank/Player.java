@@ -1,25 +1,14 @@
 package com.mashibing.tank;
 
 import java.awt.*;
-import java.util.Random;
+import java.awt.event.KeyEvent;
 
-public class Tank {
+public class Player {
     private int x, y;
     public static final int SPEED = 5;
     private Dir dir;
     private boolean bL = false, bU = false, bR = false, bD = false;
-    private boolean moving = true;
-    private int oldX , oldY ;
-    private int width,height;
-
-    public Group getGroup() {
-        return group;
-    }
-
-    public void setGroup(Group group) {
-        this.group = group;
-    }
-
+    private boolean moving = false;
     private Group group;
 
     public boolean isLive() {
@@ -48,21 +37,17 @@ public class Tank {
         this.y = y;
     }
 
-    public Tank(int x, int y, Dir dir, Group group) {
+    public Player(int x, int y, Dir dir, Group group) {
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.group = group;
-        this.oldX = x;
-        this.oldY = y;
-        this.width = ResourceMgr.goodTankU.getWidth();
-        this.height = ResourceMgr.goodTankU.getHeight();
     }
 
 
     public void paint(Graphics g) {
 
-        if (!this.isLive()) {
+        if(!this.isLive()){
             return;
         }
 
@@ -99,16 +84,56 @@ public class Tank {
             }
         }
 
+
         move();
+    }
+
+    public void keyPressed(KeyEvent e) {
+        System.out.println(e.getKeyCode());
+        int key = e.getKeyCode();
+        switch (key) {
+            case KeyEvent.VK_LEFT:
+                bL = true;
+                break;
+            case KeyEvent.VK_RIGHT:
+                bR = true;
+                break;
+            case KeyEvent.VK_UP:
+                bU = true;
+                break;
+            case KeyEvent.VK_DOWN:
+                bD = true;
+                break;
+        }
+
+        setMainDir();
+
+    }
+
+    private void setMainDir() {
+        if (!bL && !bU && !bR && !bD) {
+            moving = false;
+        } else {
+
+            moving = true;
+            if (bL && !bU && !bR && !bD) {
+                dir = Dir.L;
+            }
+            if (!bL && bU && !bR && !bD) {
+                dir = Dir.U;
+            }
+            if (!bL && !bU && bR && !bD) {
+                dir = Dir.R;
+            }
+            if (!bL && !bU && !bR && bD) {
+                dir = Dir.D;
+            }
+
+        }
     }
 
     private void move() {
         if (!moving) return;
-
-        oldX = x;
-        oldY = y;
-
-
         switch (dir) {
             case L:
                 x -= SPEED;
@@ -123,48 +148,40 @@ public class Tank {
                 y += SPEED;
                 break;
         }
-
-
-        boundsCheck();
-
-        randomDir();
-
-        int curRandom = r.nextInt(100);
-        System.out.println(curRandom);
-        if (curRandom < 10) {
-
-            fire();
-        }
     }
 
-    private void boundsCheck() {
-        if (x < 0 || y < 30 || x + width > TankFrame.GAME_WIDTH || y + height > TankFrame.GAME_HEIGHT) {
-            this.back();
-        }
-    }
+    public void keyReleased(KeyEvent e) {
+        int key = e.getKeyCode();
+        switch (key) {
+            case KeyEvent.VK_LEFT:
+                bL = false;
+                break;
+            case KeyEvent.VK_RIGHT:
+                bR = false;
+                break;
+            case KeyEvent.VK_UP:
+                bU = false;
+                break;
+            case KeyEvent.VK_DOWN:
+                bD = false;
+                break;
+            case KeyEvent.VK_CONTROL:
+                fire();
+                break;
 
-    private void back() {
-        this.x = oldX;
-        this.y = oldY;
-    }
-
-
-    private Random r = new Random();
-
-    private void randomDir() {
-        if (r.nextInt(100) > 95) {
-            this.dir = Dir.randomDir();
         }
 
+
+        setMainDir();
+
     }
+
 
 
     private void fire() {
-
-
-        int bX = x + ResourceMgr.goodTankU.getWidth() / 2 - ResourceMgr.bulletU.getWidth() / 2;
-        int bY = y + ResourceMgr.goodTankU.getHeight() / 2 - ResourceMgr.bulletU.getHeight() / 2;
-        TankFrame.INSTANCE.add(new Bullet(bX, bY, dir, group));
+        int bX = x + ResourceMgr.goodTankU.getWidth() / 2 - ResourceMgr.bulletU.getWidth()/2;
+        int bY = y + ResourceMgr.goodTankU.getHeight() / 2 - ResourceMgr.bulletU.getHeight()/2;
+        TankFrame.INSTANCE.add(new Bullet(bX,bY,dir,group));
     }
 
     public void die() {
