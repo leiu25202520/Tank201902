@@ -13,9 +13,10 @@ public class TankFrame  extends Frame {
     public static final int GAME_WIDTH = 800,GAME_HEIGHT = 600;
 
     private Player myTank;
-//    private Tank enemy;
     private List<Tank> tanks;
     private List<Bullet> bullets;
+    private List<Explode> explodes;
+    Explode e = new Explode(300,200);
 
     public TankFrame(){
         this.setTitle("tank war");
@@ -35,6 +36,7 @@ public class TankFrame  extends Frame {
         myTank = new Player(100,100,Dir.R,Group.GOOD);
         bullets = new ArrayList<>();
         tanks = new ArrayList<>();
+        explodes = new ArrayList<>();
 
         for(int i = 0 ; i < 10 ; i++){
             tanks.add(new Tank(100 + 50*i , 200,Dir.D,Group.BAD ));
@@ -44,13 +46,17 @@ public class TankFrame  extends Frame {
     public void add(Bullet bullet){
         this.bullets.add(bullet);
     }
+    public void add(Explode explode){
+        this.explodes.add(explode);
+    }
 
     @Override
     public void paint(Graphics g){
         Color c = g.getColor();
         g.setColor(Color.WHITE);
         g.drawString("bullets:"+ bullets.size(),10,40);
-        g.drawString("enemies:"+ tanks.size(),10,80);
+        g.drawString("enemies:"+ tanks.size(),10,70);
+        g.drawString("explodes:"+ explodes.size(),10,100);
         g.setColor(c);
 
         myTank.paint(g);
@@ -79,6 +85,14 @@ public class TankFrame  extends Frame {
             }
 
 
+        }
+
+        for(int i = 0; i < explodes.size();i++){
+            if(!explodes.get(i).isLive()){
+                explodes.remove(i);
+            }else{
+                explodes.get(i).paint(g);
+            }
         }
 
     }

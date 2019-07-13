@@ -130,7 +130,6 @@ public class Tank {
         randomDir();
 
         int curRandom = r.nextInt(100);
-        System.out.println(curRandom);
         if (curRandom < 10) {
 
             fire();
@@ -160,8 +159,6 @@ public class Tank {
 
 
     private void fire() {
-
-
         int bX = x + ResourceMgr.goodTankU.getWidth() / 2 - ResourceMgr.bulletU.getWidth() / 2;
         int bY = y + ResourceMgr.goodTankU.getHeight() / 2 - ResourceMgr.bulletU.getHeight() / 2;
         TankFrame.INSTANCE.add(new Bullet(bX, bY, dir, group));
@@ -169,5 +166,6 @@ public class Tank {
 
     public void die() {
         this.setLive(false);
+        TankFrame.INSTANCE.add(new Explode(x,y));
     }
 }
