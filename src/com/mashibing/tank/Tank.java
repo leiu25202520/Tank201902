@@ -11,7 +11,31 @@ public class Tank {
     private boolean moving = false;
     private Group group;
 
+    public boolean isLive() {
+        return live;
+    }
 
+    public void setLive(boolean live) {
+        this.live = live;
+    }
+
+    private boolean live = true;
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
 
     public Tank(int x, int y, Dir dir, Group group) {
         this.x = x;
@@ -22,6 +46,10 @@ public class Tank {
 
 
     public void paint(Graphics g) {
+
+        if(!this.isLive()){
+            return;
+        }
 
         if (this.group == Group.GOOD) {
             switch (dir) {
@@ -143,11 +171,20 @@ public class Tank {
 
         }
 
+
         setMainDir();
 
     }
 
+
+
     private void fire() {
-        TankFrame.INSTANCE.add(new Bullet(x,y,dir,group));
+        int bX = x + ResourceMgr.goodTankU.getWidth() / 2 - ResourceMgr.bulletU.getWidth()/2;
+        int bY = y + ResourceMgr.goodTankU.getHeight() / 2 - ResourceMgr.bulletU.getHeight()/2;
+        TankFrame.INSTANCE.add(new Bullet(bX,bY,dir,group));
+    }
+
+    public void die() {
+        this.setLive(false);
     }
 }
