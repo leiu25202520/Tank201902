@@ -1,5 +1,10 @@
 package com.mashibing.tank;
 
+import com.mashibing.tank.strategy.DefaultFireStrategy;
+import com.mashibing.tank.strategy.FireStrategy;
+import com.mashibing.tank.strategy.FourDirFireStrategy;
+import com.mashibing.tank.strategy.LeftRightFireStrategy;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
@@ -7,6 +12,23 @@ public class Player {
     private int x, y;
     public static final int SPEED = 5;
     private Dir dir;
+
+    public Dir getDir() {
+        return dir;
+    }
+
+    public void setDir(Dir dir) {
+        this.dir = dir;
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
+
     private boolean bL = false, bU = false, bR = false, bD = false;
     private boolean moving = false;
     private Group group;
@@ -179,9 +201,13 @@ public class Player {
 
 
     private void fire() {
-        int bX = x + ResourceMgr.goodTankU.getWidth() / 2 - ResourceMgr.bulletU.getWidth()/2;
+        /*int bX = x + ResourceMgr.goodTankU.getWidth() / 2 - ResourceMgr.bulletU.getWidth()/2;
         int bY = y + ResourceMgr.goodTankU.getHeight() / 2 - ResourceMgr.bulletU.getHeight()/2;
-        TankFrame.INSTANCE.add(new Bullet(bX,bY,dir,group));
+        TankFrame.INSTANCE.add(new Bullet(bX,bY,dir,group));*/
+
+//        FireStrategy strategy = new DefaultFireStrategy();/**/
+        FireStrategy strategy = new LeftRightFireStrategy();
+        strategy.fire(this);
     }
 
     public void die() {
