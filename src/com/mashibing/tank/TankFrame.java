@@ -10,14 +10,12 @@ public class TankFrame  extends Frame {
     public static final TankFrame INSTANCE = new TankFrame();
 
 
-    public static final int GAME_WIDTH = 600 ,GAME_HEIGHT = 480;
+    public static final int GAME_WIDTH = 800 ,GAME_HEIGHT = 600;
 
 
 
     private Player myTank;
-    private List<Tank> tanks;
-    private List<Bullet> bullets;
-    private List<Explode> explodes;
+    private List<AbstractGameObject> objects;
 
     public TankFrame(){
         this.setTitle("tank war");
@@ -35,66 +33,52 @@ public class TankFrame  extends Frame {
 
     private void initGameObjects() {
         myTank = new Player(100,100,Dir.R,Group.GOOD);
-        bullets = new ArrayList<>();
-        tanks = new ArrayList<>();
-        explodes = new ArrayList<>();
+
+        objects = new ArrayList<>();
 
         int tankCount = Integer.parseInt(PropertyMgr.get("initTankCount"));
 
-        for(int i = 0 ; i < tankCount ; i++){
-            tanks.add(new Tank(100 + 50*i , 200,Dir.D,Group.BAD ));
+        for (int i = 0; i < tankCount; i++) {
+            this.add(new Tank(100 + 80 * i, 200, Dir.D, Group.BAD));
         }
+
+        this.add(new Wall(300, 200, 400, 50));
     }
 
-    public void add(Bullet bullet){
-        this.bullets.add(bullet);
+    public void add(AbstractGameObject go) {
+        objects.add(go);
     }
-    public void add(Explode explode){
-        this.explodes.add(explode);
-    }
+
 
     @Override
     public void paint(Graphics g){
         Color c = g.getColor();
         g.setColor(Color.WHITE);
-        g.drawString("bullets:"+ bullets.size(),10,40);
-        g.drawString("enemies:"+ tanks.size(),10,70);
-        g.drawString("explodes:"+ explodes.size(),10,100);
+        g.drawString("objects:"+ objects.size(),10,40);
         g.setColor(c);
 
         myTank.paint(g);
 
 
-
-        for(int i = 0; i < tanks.size();i++){
-            if(!tanks.get(i).isLive()){
-                tanks.remove(i);
-            }else{
-                tanks.get(i).paint(g);
+        for(int i=0; i<objects.size(); i++) {
+            AbstractGameObject object = objects.get(i);
+            if(!object.isLive()) {
+                objects.remove(object);
+                break;
             }
         }
-        for(int i = 0; i < bullets.size();i++){
 
-            for(int j = 0 ; j < tanks.size();j++){
-
-                bullets.get(i).collidesWithTank(tanks.get(j));
-            }
+        for(int i=0; i<objects.size(); i++) {
 
 
-            if(!bullets.get(i).isLive()){
-                bullets.remove(i);
-            }else{
-                bullets.get(i).paint(g);
-            }
+//            AbstractGameObject go1 = objects.get(i);
+//            for(int j=0; j<objects.size(); j++) {
+//                AbstractGameObject go2 = objects.get(j);
+//                chain.collide(go1, go2);
+//            }
 
-
-        }
-
-        for(int i = 0; i < explodes.size();i++){
-            if(!explodes.get(i).isLive()){
-                explodes.remove(i);
-            }else{
-                explodes.get(i).paint(g);
+            if(objects.get(i).isLive()) {
+                objects.get(i).paint(g);
             }
         }
 

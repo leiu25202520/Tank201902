@@ -2,7 +2,7 @@ package com.mashibing.tank;
 
 import java.awt.*;
 
-public class Bullet {
+public class Bullet  extends AbstractGameObject {
     public static final int SPEED = 10;
     private int x, y;
     private Dir dir;

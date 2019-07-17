@@ -1,17 +1,16 @@
 package com.mashibing.tank;
 
-import com.mashibing.tank.strategy.DefaultFireStrategy;
 import com.mashibing.tank.strategy.FireStrategy;
-import com.mashibing.tank.strategy.FourDirFireStrategy;
-import com.mashibing.tank.strategy.LeftRightFireStrategy;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.lang.reflect.InvocationTargetException;
 
-public class Player {
+public class Player  extends AbstractGameObject {
     private int x, y;
     public static final int SPEED = 5;
     private Dir dir;
+    private FireStrategy strategy;
 
     public Dir getDir() {
         return dir;
@@ -64,12 +63,32 @@ public class Player {
         this.y = y;
         this.dir = dir;
         this.group = group;
+        this.initFireStrategy();
+    }
+
+    private void initFireStrategy() {
+        String className = PropertyMgr.get("tankFireStrategy");
+
+        try {
+            Class clazz = Class.forName("com.mashibing.tank.strategy."+className);
+            strategy = (FireStrategy)(clazz.getDeclaredConstructor().newInstance());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
     }
 
 
     public void paint(Graphics g) {
 
-        if(!this.isLive()){
+        if (!this.isLive()) {
             return;
         }
 
@@ -199,14 +218,7 @@ public class Player {
     }
 
 
-
     private void fire() {
-        /*int bX = x + ResourceMgr.goodTankU.getWidth() / 2 - ResourceMgr.bulletU.getWidth()/2;
-        int bY = y + ResourceMgr.goodTankU.getHeight() / 2 - ResourceMgr.bulletU.getHeight()/2;
-        TankFrame.INSTANCE.add(new Bullet(bX,bY,dir,group));*/
-
-//        FireStrategy strategy = new DefaultFireStrategy();/**/
-        FireStrategy strategy = new LeftRightFireStrategy();
         strategy.fire(this);
     }
 
