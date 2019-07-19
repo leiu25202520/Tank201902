@@ -4,13 +4,27 @@ import java.awt.*;
 import java.util.Random;
 
 public class Tank  extends AbstractGameObject {
-    private int x, y;
     public static final int SPEED = 5;
+    private int x, y;
     private Dir dir;
     private boolean bL = false, bU = false, bR = false, bD = false;
     private boolean moving = true;
     private int oldX , oldY ;
     private int width,height;
+    private Group group;
+    private boolean live = true;
+    private Random r = new Random();
+
+    public Tank(int x, int y, Dir dir, Group group) {
+        this.x = x;
+        this.y = y;
+        this.dir = dir;
+        this.group = group;
+        this.oldX = x;
+        this.oldY = y;
+        this.width = ResourceMgr.goodTankU.getWidth();
+        this.height = ResourceMgr.goodTankU.getHeight();
+    }
 
     public Group getGroup() {
         return group;
@@ -20,8 +34,6 @@ public class Tank  extends AbstractGameObject {
         this.group = group;
     }
 
-    private Group group;
-
     public boolean isLive() {
         return live;
     }
@@ -29,8 +41,6 @@ public class Tank  extends AbstractGameObject {
     public void setLive(boolean live) {
         this.live = live;
     }
-
-    private boolean live = true;
 
     public int getX() {
         return x;
@@ -47,18 +57,6 @@ public class Tank  extends AbstractGameObject {
     public void setY(int y) {
         this.y = y;
     }
-
-    public Tank(int x, int y, Dir dir, Group group) {
-        this.x = x;
-        this.y = y;
-        this.dir = dir;
-        this.group = group;
-        this.oldX = x;
-        this.oldY = y;
-        this.width = ResourceMgr.goodTankU.getWidth();
-        this.height = ResourceMgr.goodTankU.getHeight();
-    }
-
 
     public void paint(Graphics g) {
 
@@ -146,9 +144,6 @@ public class Tank  extends AbstractGameObject {
         this.x = oldX;
         this.y = oldY;
     }
-
-
-    private Random r = new Random();
 
     private void randomDir() {
         if (r.nextInt(100) > 95) {

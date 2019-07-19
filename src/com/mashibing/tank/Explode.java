@@ -6,16 +6,6 @@ public class Explode  extends AbstractGameObject {
     private int x, y;
     private int width, height;
     private int step = 0;
-
-
-    public boolean isLive() {
-        return live;
-    }
-
-    public void setLive(boolean live) {
-        this.live = live;
-    }
-
     private boolean live = true;
 
     public Explode(int x, int y) {
@@ -25,6 +15,13 @@ public class Explode  extends AbstractGameObject {
         this.height = ResourceMgr.explodes[0].getHeight();
     }
 
+    public boolean isLive() {
+        return live;
+    }
+
+    public void setLive(boolean live) {
+        this.live = live;
+    }
 
     public void paint(Graphics g) {
         if (!live) {

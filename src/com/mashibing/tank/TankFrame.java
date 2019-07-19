@@ -6,22 +6,18 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TankFrame  extends Frame {
+public class TankFrame extends Frame {
+    public static final int GAME_WIDTH = 800, GAME_HEIGHT = 600;
     public static final TankFrame INSTANCE = new TankFrame();
-
-
-    public static final int GAME_WIDTH = 800 ,GAME_HEIGHT = 600;
-
-
-
+    Image offScreenImage = null;
     private Player myTank;
     private List<AbstractGameObject> objects;
 
-    public TankFrame(){
+    public TankFrame() {
         this.setTitle("tank war");
 
-        this.setLocation(400,100);
-        this.setSize(GAME_WIDTH,GAME_HEIGHT);
+        this.setLocation(400, 100);
+        this.setSize(GAME_WIDTH, GAME_HEIGHT);
 
         this.addKeyListener(new TankKeyListener());
 
@@ -32,7 +28,7 @@ public class TankFrame  extends Frame {
     }
 
     private void initGameObjects() {
-        myTank = new Player(100,100,Dir.R,Group.GOOD);
+        myTank = new Player(100, 100, Dir.R, Group.GOOD);
 
         objects = new ArrayList<>();
 
@@ -49,26 +45,25 @@ public class TankFrame  extends Frame {
         objects.add(go);
     }
 
-
     @Override
-    public void paint(Graphics g){
+    public void paint(Graphics g) {
         Color c = g.getColor();
         g.setColor(Color.WHITE);
-        g.drawString("objects:"+ objects.size(),10,40);
+        g.drawString("objects:" + objects.size(), 10, 40);
         g.setColor(c);
 
         myTank.paint(g);
 
 
-        for(int i=0; i<objects.size(); i++) {
+        for (int i = 0; i < objects.size(); i++) {
             AbstractGameObject object = objects.get(i);
-            if(!object.isLive()) {
+            if (!object.isLive()) {
                 objects.remove(object);
                 break;
             }
         }
 
-        for(int i=0; i<objects.size(); i++) {
+        for (int i = 0; i < objects.size(); i++) {
 
 
 //            AbstractGameObject go1 = objects.get(i);
@@ -77,14 +72,12 @@ public class TankFrame  extends Frame {
 //                chain.collide(go1, go2);
 //            }
 
-            if(objects.get(i).isLive()) {
+            if (objects.get(i).isLive()) {
                 objects.get(i).paint(g);
             }
         }
 
     }
-
-    Image offScreenImage = null;
 
     @Override
     public void update(Graphics g) {

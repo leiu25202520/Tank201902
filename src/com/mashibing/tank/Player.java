@@ -6,11 +6,23 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.lang.reflect.InvocationTargetException;
 
-public class Player  extends AbstractGameObject {
-    private int x, y;
+public class Player extends AbstractGameObject {
     public static final int SPEED = 5;
+    private int x, y;
     private Dir dir;
     private FireStrategy strategy;
+    private boolean bL = false, bU = false, bR = false, bD = false;
+    private boolean moving = false;
+    private Group group;
+    private boolean live = true;
+
+    public Player(int x, int y, Dir dir, Group group) {
+        this.x = x;
+        this.y = y;
+        this.dir = dir;
+        this.group = group;
+        this.initFireStrategy();
+    }
 
     public Dir getDir() {
         return dir;
@@ -28,10 +40,6 @@ public class Player  extends AbstractGameObject {
         this.group = group;
     }
 
-    private boolean bL = false, bU = false, bR = false, bD = false;
-    private boolean moving = false;
-    private Group group;
-
     public boolean isLive() {
         return live;
     }
@@ -39,8 +47,6 @@ public class Player  extends AbstractGameObject {
     public void setLive(boolean live) {
         this.live = live;
     }
-
-    private boolean live = true;
 
     public int getX() {
         return x;
@@ -58,20 +64,12 @@ public class Player  extends AbstractGameObject {
         this.y = y;
     }
 
-    public Player(int x, int y, Dir dir, Group group) {
-        this.x = x;
-        this.y = y;
-        this.dir = dir;
-        this.group = group;
-        this.initFireStrategy();
-    }
-
     private void initFireStrategy() {
         String className = PropertyMgr.get("tankFireStrategy");
 
         try {
-            Class clazz = Class.forName("com.mashibing.tank.strategy."+className);
-            strategy = (FireStrategy)(clazz.getDeclaredConstructor().newInstance());
+            Class clazz = Class.forName("com.mashibing.tank.strategy." + className);
+            strategy = (FireStrategy) (clazz.getDeclaredConstructor().newInstance());
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {
