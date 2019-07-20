@@ -9,7 +9,7 @@ public class LeftRightFireStrategy implements FireStrategy{
         int bY = p.getY() + ResourceMgr.goodTankU.getHeight() / 2 - ResourceMgr.bulletU.getHeight()/2;
 
 
-            TankFrame.INSTANCE.add(new Bullet(bX,bY,Dir.L,p.getGroup()));
-            TankFrame.INSTANCE.add(new Bullet(bX,bY,Dir.R,p.getGroup()));
+            TankFrame.INSTANCE.getGm().add(new Bullet(bX,bY,Dir.L,p.getGroup()));
+            TankFrame.INSTANCE.getGm().add(new Bullet(bX,bY,Dir.R,p.getGroup()));
     }
 }
