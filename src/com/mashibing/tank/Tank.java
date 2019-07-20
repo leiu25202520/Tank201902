@@ -14,6 +14,7 @@ public class Tank  extends AbstractGameObject {
     private Group group;
     private boolean live = true;
     private Random r = new Random();
+    private Rectangle rect;
 
     public Tank(int x, int y, Dir dir, Group group) {
         this.x = x;
@@ -24,6 +25,8 @@ public class Tank  extends AbstractGameObject {
         this.oldY = y;
         this.width = ResourceMgr.goodTankU.getWidth();
         this.height = ResourceMgr.goodTankU.getHeight();
+
+        this.rect = new Rectangle(x, y, width, height);
     }
 
     public Group getGroup() {
@@ -98,6 +101,10 @@ public class Tank  extends AbstractGameObject {
         }
 
         move();
+
+        //update rect
+        rect.x = x;
+        rect.y = y;
     }
 
     private void move() {
@@ -140,7 +147,7 @@ public class Tank  extends AbstractGameObject {
         }
     }
 
-    private void back() {
+    public void back() {
         this.x = oldX;
         this.y = oldY;
     }
@@ -157,6 +164,10 @@ public class Tank  extends AbstractGameObject {
         int bX = x + ResourceMgr.goodTankU.getWidth() / 2 - ResourceMgr.bulletU.getWidth() / 2;
         int bY = y + ResourceMgr.goodTankU.getHeight() / 2 - ResourceMgr.bulletU.getHeight() / 2;
         TankFrame.INSTANCE.add(new Bullet(bX, bY, dir, group));
+    }
+
+    public Rectangle getRect() {
+        return rect;
     }
 
     public void die() {

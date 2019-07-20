@@ -1,5 +1,7 @@
 package com.mashibing.tank;
 
+import com.mashibing.tank.chainofresponsibility.ColliderChain;
+
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -11,6 +13,7 @@ public class TankFrame extends Frame {
     public static final TankFrame INSTANCE = new TankFrame();
     Image offScreenImage = null;
     private Player myTank;
+    ColliderChain chain = new ColliderChain();
     private List<AbstractGameObject> objects;
 
     public TankFrame() {
@@ -66,11 +69,11 @@ public class TankFrame extends Frame {
         for (int i = 0; i < objects.size(); i++) {
 
 
-//            AbstractGameObject go1 = objects.get(i);
-//            for(int j=0; j<objects.size(); j++) {
-//                AbstractGameObject go2 = objects.get(j);
-//                chain.collide(go1, go2);
-//            }
+            AbstractGameObject go1 = objects.get(i);
+            for(int j=0; j<objects.size(); j++) {
+                AbstractGameObject go2 = objects.get(j);
+                chain.collide(go1, go2);
+            }
 
             if (objects.get(i).isLive()) {
                 objects.get(i).paint(g);
