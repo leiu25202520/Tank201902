@@ -4,6 +4,7 @@ package com.mashibing.tank;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.*;
 
 public class TankFrame extends Frame {
     public static final int GAME_WIDTH = 800, GAME_HEIGHT = 600;
@@ -48,13 +49,55 @@ public class TankFrame extends Frame {
     private class TankKeyListener extends KeyAdapter {
         @Override
         public void keyPressed(KeyEvent e) {
-            gm.getMyTank().keyPressed(e);
+            int key = e.getKeyCode();
+            if(key == KeyEvent.VK_S) save();
+            else if(key == KeyEvent.VK_L) load();
+            else gm.getMyTank().keyPressed(e);
 
         }
 
         @Override
         public void keyReleased(KeyEvent e) {
             gm.getMyTank().keyReleased(e);
+        }
+    }
+
+
+    private void save() {
+        ObjectOutputStream oos = null;
+        try {
+
+            File f = new File("/Users/liulei435/tank.dat");
+            FileOutputStream fos = new FileOutputStream(f);
+            oos = new ObjectOutputStream(fos);
+            oos.writeObject(gm);
+            oos.flush();
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if(oos != null)
+                    oos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void load() {
+        try {
+
+            File f = new File("/Users/liulei435/tank.dat");
+            FileInputStream fis = new FileInputStream(f);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            this.gm = (GameModel) (ois.readObject());
+
+            ois.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

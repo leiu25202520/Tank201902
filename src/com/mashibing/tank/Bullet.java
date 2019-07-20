@@ -10,6 +10,8 @@ public class Bullet  extends AbstractGameObject {
     private boolean live = true;
     private int w = ResourceMgr.bulletU.getWidth();
     private int h = ResourceMgr.bulletU.getHeight();
+    public static final int W = ResourceMgr.bulletU.getWidth();
+    public static final int H = ResourceMgr.bulletU.getHeight();
 
     private Rectangle rect;
 
