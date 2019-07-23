@@ -9,7 +9,7 @@ public class SerializeTest {
     public void testSave(){
         try {
             T t = new T();
-            File f = new File("c:/test/s.dat");
+            File f = new File("/Users/liulei435/s.dat");
             FileOutputStream fos = new FileOutputStream(f);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(t);
@@ -27,7 +27,7 @@ public class SerializeTest {
 
         try {
 
-            File f = new File("c:/test/s.dat");
+            File f = new File("/Users/liulei435/s.dat");
             FileInputStream fis = new FileInputStream(f);
             ObjectInputStream ois = new ObjectInputStream(fis);
             T t = (T)(ois.readObject());
