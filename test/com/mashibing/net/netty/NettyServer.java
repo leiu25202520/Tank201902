@@ -20,7 +20,14 @@ public class NettyServer {
         //异步全双工
         b.channel(NioServerSocketChannel.class);
         b.childHandler(new MyChildInitializer());
-        b.bind(8888).sync();
+        ChannelFuture future = b.bind(8888).sync();
+        future.channel().closeFuture().sync();
+
+
+        //b.bind(8888).sync();
+
+        bossGroup.shutdownGracefully();
+        workerGroup.shutdownGracefully();
 
     }
 
