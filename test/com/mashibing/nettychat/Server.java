@@ -1,0 +1,58 @@
+package com.mashibing.nettychat;
+
+import io.netty.bootstrap.ServerBootstrap;
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.*;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioServerSocketChannel;
+
+public class Server {
+    public static void main(String[] args) throws Exception{
+        //负责接客
+        EventLoopGroup bossGroup = new NioEventLoopGroup(2);
+        //负责服务
+        EventLoopGroup workerGroup = new NioEventLoopGroup(4);
+        //Server启动辅助类
+        ServerBootstrap b = new ServerBootstrap();
+
+        b.group(bossGroup,workerGroup);
+        //异步全双工
+        b.channel(NioServerSocketChannel.class);
+        b.childHandler(new ServerInitializer());
+        ChannelFuture future = b.bind(8888).sync();
+        future.channel().closeFuture().sync();
+
+
+        //b.bind(8888).sync();
+
+        bossGroup.shutdownGracefully();
+        workerGroup.shutdownGracefully();
+
+    }
+
+}
+
+class ServerInitializer extends ChannelInitializer<SocketChannel>{
+    @Override
+    protected void initChannel(SocketChannel socketChannel) throws Exception {
+        System.out.println("a client connect!");
+        socketChannel.pipeline().addLast(new ServerHandler());
+        socketChannel.pipeline().addLast(new ServerHandler());
+    }
+}
+
+class ServerHandler extends ChannelInboundHandlerAdapter{
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        super.exceptionCaught(ctx, cause);
+    }
+
+    @Override
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        ByteBuf buf = (ByteBuf)msg;
+        System.out.println(buf.toString());
+        //buf.release();
+        ctx.writeAndFlush(msg);
+    }
+}
