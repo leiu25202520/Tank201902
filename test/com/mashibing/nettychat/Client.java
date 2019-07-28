@@ -7,6 +7,7 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.util.ReferenceCountUtil;
 
 public class Client {
 
@@ -46,6 +47,11 @@ public class Client {
         channel.writeAndFlush(Unpooled.copiedBuffer(text.getBytes()));
     }
 
+    public void closeConnection() {
+        send("__byte__");
+        channel.close();
+    }
+
     static class MyHandler extends ChannelInboundHandlerAdapter {
         @Override
         public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
@@ -60,7 +66,22 @@ public class Client {
 
         @Override
         public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-            System.out.println(msg.toString());
+
+            ByteBuf buf = null;
+
+            try {
+                buf = (ByteBuf)msg;
+                byte[] bytes = new byte[buf.readableBytes()];
+                buf.getBytes(buf.readerIndex(),bytes);
+                String str = new String(bytes);
+                ClientFrame.INSTANCE.updateText(str);
+                //System.out.println(str);
+                //System.out.println(buf.refCnt());
+            } finally {
+                if(buf != null)
+                    ReferenceCountUtil.release(buf);
+            }
+
         }
     }
 }
